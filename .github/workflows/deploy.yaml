@@ -1,0 +1,51 @@
+name: Manual Kubernetes Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Choose what to install"
+        required: true
+        default: "config"
+        type: choice
+        options:
+          - config
+          - keycloak
+          - postgres
+
+jobs:
+  deploy:
+    environment: PROD
+    name: Run install - ${{ github.event.inputs.task }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_CONTENT }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+          kubectl config use-context jw-prod
+
+      - name: Set up Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Install config
+        if: ${{ github.event.inputs.task == 'config' }}
+        run: make ENV=PROD AGE_KEY=${{ secrets.SOPS_AGE_KEY }} install-config
+
+      - name: Install Keycloak
+        if: ${{ github.event.inputs.task == 'keycloak' }}
+        run: make ENV=PROD install-keycloak
+
+      - name: Install Postgres
+        if: ${{ github.event.inputs.task == 'postgres' }}
+        run: make ENV=PROD install-postgres
+
+      - name: Cleanup
+        run: rm ~/.kube/config
+
