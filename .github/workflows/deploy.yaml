@@ -39,7 +39,7 @@ jobs:
       - name: Install config
         if: ${{ github.event.inputs.task == 'config' }}
         run: |
-          curl -sLo sops https://github.com/mozilla/sops/releases/latest/download/sops-linux-amd64
+          curl -sLo sops https://github.com/mozilla/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64
           chmod +x sops
           sudo mv sops /usr/local/bin/sops
           make ENV=PROD install-config
