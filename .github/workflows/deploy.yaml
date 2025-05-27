@@ -1,4 +1,4 @@
-name: Manual Kubernetes Deployment
+name: Infra deployments
 
 on:
   workflow_dispatch:
