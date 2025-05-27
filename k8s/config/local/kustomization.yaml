@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: infra
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: infra-pg-secrets
+    namespace: infra
+    env: pg-secrets.env
+    type: Opaque
+  - name: infra-keycloak-secrets
+    namespace: infra
+    env: keycloak-secrets.env
+    type: Opaque

@@ -1,0 +1,40 @@
+# Keycloak Admin User Configuration
+auth:
+  existingSecret: infra-keycloak-secrets
+  adminUser: admin
+  passwordSecretKey: KEYCLOAK_ADMIN_PASSWORD
+
+externalDatabase:
+  existingSecret: infra-keycloak-secrets
+  existingSecretPasswordKey: PGPASSWORD
+  existingSecretUserKey: PGUSERNAME
+  host: postgres-postgresql.infra.svc.cluster.local
+  database: jw
+  port: 5432
+
+postgresql:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 2
+    memory: 512Mi
+  limits:
+    cpu: 3
+    memory: 1024Mi
+
+extraEnvVars:
+  - name: KEYCLOAK_PROFILE
+    value: "prod"
+  - name: DB_SCHEMA
+    value: "keycloak"
+  - name: KC_PRODUCTION
+    value: "true"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: VERTX_WORKER_POOL_SIZE
+    value: "20"
+  - name: VERTX_EVENT_LOOP_POOL_SIZE
+    value: "8"

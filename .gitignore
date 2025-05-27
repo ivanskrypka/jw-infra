@@ -1,0 +1,6 @@
+sops/*
+testing/*
+*.iml
+.idea/
+k8s/config/prod/*secrets.env
+k8s/configs.yaml

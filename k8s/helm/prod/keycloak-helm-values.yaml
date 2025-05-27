@@ -1,0 +1,15 @@
+ingress:
+  enabled: true
+  hostname: auth.ukrjw.org
+  ingressClassName: nginx
+  tls: true
+  extraTls:
+    - hosts:
+        - auth.ukrjw.org
+      secretName: tls-secret
+
+autoscaling:
+  enabled: true
+  targetCPU: 85
+  targetMemory: 85
+  maxReplicas: 2

@@ -1,0 +1,39 @@
+auth:
+  existingSecret: infra-pg-secrets
+  username: jwuser
+  database: "jw"
+
+primary:
+  persistence:
+    enabled: true
+    size: 3Gi
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "500m"
+  extendedConfiguration: |
+    max_connections = 300
+    shared_buffers = 256MB
+    wal_level = logical
+    log_min_messages = warning
+    log_min_error_statement = error
+    log_connections = on
+    log_disconnections = on
+    log_statement = none
+
+volumePermissions:
+  enabled: true
+
+metrics:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+service:
+  type: ClusterIP
+  ports:
+    postgresql: 5432
