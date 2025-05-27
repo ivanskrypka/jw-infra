@@ -38,7 +38,10 @@ jobs:
 
       - name: Install config
         if: ${{ github.event.inputs.task == 'config' }}
-        run: make ENV=PROD install-config
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sops
+          make ENV=PROD install-config
 
       - name: Install Keycloak
         if: ${{ github.event.inputs.task == 'keycloak' }}
