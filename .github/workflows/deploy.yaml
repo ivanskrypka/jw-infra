@@ -41,7 +41,7 @@ jobs:
           chmod +x sops
           sudo mv sops /usr/local/bin/sops
           SOPS_KEY=$(echo "${{ secrets.SOPS_AGE_KEY}}" | base64 -d)
-          make ENV=PROD AGE_KEY=$SOPS_KEY install-config
+          make ENV=PROD AGE_KEY="$SOPS_KEY" install-config
 
       - name: Install Keycloak
         if: ${{ github.event.inputs.task == 'keycloak' }}
