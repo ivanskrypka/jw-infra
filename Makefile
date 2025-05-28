@@ -66,9 +66,7 @@ endif
 
 check-age-key:
 ifeq ($(ENV),PROD)
-ifndef AGE_KEY
-	$(error AGE_KEY is not set. Usage: make decrypt AGE_KEY="your-private-key")
-else
+ifdef AGE_KEY
 	export SOPS_AGE_KEY=$$(AGE_KEY);
 endif
 endif
