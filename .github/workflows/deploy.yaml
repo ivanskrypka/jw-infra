@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       task:
-        description: "Choose what to install"
+        description: "Choose what to do"
         required: true
         default: "config"
         type: choice
         options:
-          - config
-          - keycloak
-          - postgres
+          - config/deploy
+          - keycloak/install
+          - postgres/install
 
 jobs:
   deploy:
@@ -34,23 +34,23 @@ jobs:
         run: |
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-      - name: Install config
-        if: ${{ github.event.inputs.task == 'config' }}
+      - name: Deploy config
+        if: ${{ github.event.inputs.task == 'config/deploy' }}
         run: |
           mkdir -p ~/.config/sops/age
           echo "${{ secrets.SOPS_AGE_KEY}}" | base64 -d > ~/.config/sops/age/keys.txt
           curl -sLo sops https://github.com/mozilla/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64
           chmod +x sops
           sudo mv sops /usr/local/bin/sops
-          make ENV=PROD install-config
+          make ENV=PROD config/deploy
 
       - name: Install Keycloak
-        if: ${{ github.event.inputs.task == 'keycloak' }}
-        run: make ENV=PROD install-keycloak
+        if: ${{ github.event.inputs.task == 'keycloak/install' }}
+        run: make ENV=PROD keycloak/install
 
       - name: Install Postgres
-        if: ${{ github.event.inputs.task == 'postgres' }}
-        run: make ENV=PROD install-postgres
+        if: ${{ github.event.inputs.task == 'postgres/install' }}
+        run: make ENV=PROD postgres/install
 
       - name: Cleanup
         run: rm ~/.kube/config

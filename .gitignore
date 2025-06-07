@@ -3,6 +3,8 @@ testing/*
 *.iml
 .idea/
 k8s/config/prod/*secrets.env
+k8s/certs/cl.crt
+k8s/certs/cl.key
 k8s/configs.yaml
 .secrets
 .actrc
